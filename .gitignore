@@ -50,3 +50,18 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Folders
+Win32/
+x64/
+Release/
+Debug/
+
+Win10Debug/
+Win10Release/
+Win8Debug/
+Win8Release/
+Win7Debug/
+Win7Release/
+WinXPDebug/
+WinXPRelease/
