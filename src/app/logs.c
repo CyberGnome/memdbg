@@ -67,8 +67,8 @@ char* BuildLogMsg(
             return NULL;
         }
         strcat_s(msgBuf, bufSize, line);
-        strcat_s(msgBuf, bufSize, car_ret_1);
     }
+    strcat_s(msgBuf, bufSize, car_ret_1);
 
     if (fileAllocatedMem) {
         strcat_s(msgBuf, bufSize, memory_alloc);
@@ -99,7 +99,7 @@ int MdbgLoggingBug(
     unsigned int bufSize = MIN_MSG_SIZE;
     int          err;
 
-    if (!fileAllocatedMem) {
+    if (bugFlag != UNALLOC_MEMORY && !fileAllocatedMem) {
         return STATUS_INVALID_PARAMETER;
     }
 
@@ -107,8 +107,8 @@ int MdbgLoggingBug(
 
     switch (bugFlag) {
     case MEMORY_LEAK:
-        logBuf = BuildLogMsg(mem_leaks_bug, NULL, 0, fileAllocatedMem,
-            lineAllocatedMem, bufSize);
+        logBuf = BuildLogMsg(mem_leaks_bug, fileAllocatedMem,
+            lineAllocatedMem, NULL, 0, bufSize);
         break;
     case OVERFLOW:
         if (!fileFailedMem) {

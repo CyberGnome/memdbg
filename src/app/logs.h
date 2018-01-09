@@ -28,7 +28,7 @@ int MdbgLoggingBug(
 #define UNALLOC_MEMORY (unsigned int)0xDEADC0DE
 
 // strings
-#define mem_leaks_bug    (char*)"Memory Leak at file "
+#define mem_leaks_bug    (char*)"Memory Leak"
 #define buf_overflow_bug (char*)"Buffer overflow at file "
 #define unalloc_mem_bug  (char*)"Trying to free unallocated memory at file "
 
