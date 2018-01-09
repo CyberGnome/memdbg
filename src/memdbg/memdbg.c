@@ -134,6 +134,32 @@ void* _dbg_malloc(
     return buf;
 }
 
+void* _dbg_calloc(
+    _In_ size_t num,
+    _In_ size_t size,
+    _In_ char*  srcFile,
+    _In_ uint   fileLine)
+{
+    void*     buf;
+    size_t    fullSize = size + num;
+
+    buf = malloc(fullSize + sizeof(uint));
+    if (!buf) {
+        return NULL;
+    }
+    memset(buf, 0, fullSize);
+
+    *(uint*)((char*)buf + fullSize) = MEMDBG_TAG;
+
+    if (AddPoolToTree(buf, fullSize, srcFile, fileLine)) {
+        free(buf);
+        buf = NULL;
+    }
+
+    return buf;
+}
+
+
 void _dbg_free(
     _In_ void* buf,
     _In_ char* srcFile,
