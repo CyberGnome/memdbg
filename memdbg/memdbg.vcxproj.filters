@@ -15,30 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\app\main.c">
+    <ClCompile Include="..\src\memdbg\bin_tree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\bin_tree.c">
+    <ClCompile Include="..\src\memdbg\logs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\memdbg.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\app\logs.c">
+    <ClCompile Include="..\src\memdbg\memdbg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\app\bin_tree.h">
+    <ClInclude Include="..\src\memdbg\bin_tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\memdbg.h">
+    <ClInclude Include="..\src\memdbg\logs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\mem_struct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\app\logs.h">
+    <ClInclude Include="..\src\memdbg\mem_struct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
