@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "bin_tree.h"
+#include "logs.h"
 
 MEMDBG g_dbgData;
 
@@ -22,11 +23,14 @@ char* DuplString(
 
 static
 void CheckOverflow(
-    void*  buf,
-    size_t size)
+    void*        buf,
+    size_t       size,
+    char*        srcFile,
+    unsigned int fileLine)
 {
     if (*(uint*)((char*)buf + size) != MEMDBG_TAG) {
-        /*LOG THIS ERROR TO FILE IN THE FUTURE*/
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            srcFile, fileLine, NULL, 0, OVERFLOW);
     }
 
     return;
@@ -48,17 +52,25 @@ void BtFreeTree (
     BtFreeTree(node->left);
     BtFreeTree(node->right);
 
-    /*LOG THIS ERROR TO FILE IN THE FUTURE*/
-    CheckOverflow(node->data.addr, node->data.size);
+    MdbgLoggingBug(&g_dbgData.hLogFile,
+        node->data.dbgInfo.srcFile,
+        node->data.dbgInfo.fileLine,
+        NULL, 0, MEMORY_LEAK);
+    CheckOverflow(node->data.addr, node->data.size,
+        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
     free(node->data.addr);
     free(node);
+
+    return;
 }
 
 
 void memdbg_deinit(void)
 {
     BtFreeTree((BINARY_TREE*)g_dbgData.bufTree);
-
+    if (g_dbgData.hLogFile) {
+        MdbgCloseLogFile(g_dbgData.hLogFile);
+    }
     return;
 }
 
@@ -112,17 +124,20 @@ void _dbg_free(
     BINARY_TREE* node = NULL;
 
     if (!g_dbgData.bufTree) {
-        /*LOG THIS ERROR TO FILE IN THE FUTURE*/
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            NULL, 0, srcFile, fileLine, UNALLOC_MEMORY);
         return;
     }
 
     node = BtSearchNode((BINARY_TREE*)g_dbgData.bufTree, buf);
     if (!node) {
-        /*LOG THIS ERROR TO FILE IN THE FUTURE*/
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            NULL, 0, srcFile, fileLine, UNALLOC_MEMORY);
         return;
     }
 
-    CheckOverflow(buf, node->data.size);
+    CheckOverflow(buf, node->data.size, 
+        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
 
     free(buf);
     g_dbgData.bufTree = BtDeleteNode((BINARY_TREE*)g_dbgData.bufTree,
