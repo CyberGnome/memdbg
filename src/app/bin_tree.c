@@ -3,10 +3,10 @@
 #include "bin_tree.h"
 
 BINARY_TREE* BtAddNode(
-    _Inout_  BINARY_TREE *root,
-    _In_opt_ BINARY_TREE *node,
-    _In_     void*  data,
-    _In_     size_t dataSize)
+    _Inout_  BINARY_TREE* root,
+    _In_opt_ BINARY_TREE* node,
+    _In_     void*        data,
+    _In_     size_t       dataSize)
 {
     if (!node) {
         node = (BINARY_TREE*)malloc(sizeof(BINARY_TREE));
@@ -40,8 +40,8 @@ BINARY_TREE* BtAddNode(
 }
 
 BINARY_TREE* BtSearchNode(
-    _In_ BINARY_TREE *root,
-    _In_ void* memAddr)
+    _In_ BINARY_TREE* root,
+    _In_ void*        memAddr)
 {
     if(!root) {
         return root;

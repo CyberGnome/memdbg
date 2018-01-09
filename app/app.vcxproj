@@ -77,11 +77,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\app\bin_tree.c" />
+    <ClCompile Include="..\src\app\logs.c" />
     <ClCompile Include="..\src\app\main.c" />
     <ClCompile Include="..\src\app\memdbg.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\bin_tree.h" />
+    <ClInclude Include="..\src\app\logs.h" />
     <ClInclude Include="..\src\app\memdbg.h" />
     <ClInclude Include="..\src\app\mem_struct.h" />
   </ItemGroup>

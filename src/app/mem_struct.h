@@ -19,6 +19,4 @@ typedef struct {
 
 #define MEMDBG_TAG (uint)'MDBG'
 
-#define LOG_FILE (char*)"MEMORY_BUGS.log"
-
 #endif // mem_struct_h__

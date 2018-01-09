@@ -24,6 +24,9 @@
     <ClCompile Include="..\src\app\memdbg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\app\logs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\bin_tree.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\app\mem_struct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\logs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
