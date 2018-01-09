@@ -59,6 +59,7 @@ void BtFreeTree (
     CheckOverflow(node->data.addr, node->data.size,
         node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
     free(node->data.addr);
+    free(node->data.dbgInfo.srcFile);
     free(node);
 
     return;
@@ -74,13 +75,49 @@ void memdbg_deinit(void)
     return;
 }
 
+static
+int AddPoolToTree(
+    _In_ void*  buf,
+    _In_ size_t size,
+    _In_ char*  srcFile,
+    _In_ uint   fileLine)
+{
+    BUF_INFO* node;
+    int       err = 0;
+
+    node = (BUF_INFO*)malloc(sizeof(BUF_INFO));
+    if (!node) {
+        return GetLastError();
+    }
+
+    node->addr = buf;
+    node->size = size;
+    node->dbgInfo.fileLine = fileLine;
+    node->dbgInfo.srcFile = DuplString(srcFile);
+    if (!node->dbgInfo.srcFile) {
+        err = GetLastError();
+        free(node);
+        goto _ret;
+    }
+
+    g_dbgData.bufTree = BtAddNode((BINARY_TREE*)g_dbgData.bufTree,
+        (BINARY_TREE*)g_dbgData.bufTree, node, sizeof(BUF_INFO));
+    if (!g_dbgData.bufTree) {
+        free(node->dbgInfo.srcFile);
+        free(node);
+        err = -1;
+    }
+
+_ret:
+    return err;
+}
+
 void* _dbg_malloc(
     _In_ size_t size,
     _In_ char*  srcFile,
     _In_ uint   fileLine)
 {
     void*     buf;
-    BUF_INFO* node;
 
     buf = malloc(size + sizeof(uint));
     if (!buf) {
@@ -89,28 +126,9 @@ void* _dbg_malloc(
 
     *(uint*)((char*)buf + size) = MEMDBG_TAG;
 
-    node = (BUF_INFO*)malloc(sizeof(BUF_INFO));
-    if (!node) {
+    if (AddPoolToTree(buf, size, srcFile, fileLine)) {
         free(buf);
-        return NULL;
-    }
-
-    node->addr = buf;
-    node->size = size;
-    node->dbgInfo.fileLine = fileLine;
-    node->dbgInfo.srcFile = DuplString(srcFile);
-    if (!node->dbgInfo.srcFile) {
-        free(node);
-        free(buf);
-        return NULL;
-    }
-
-    g_dbgData.bufTree = BtAddNode((BINARY_TREE*)g_dbgData.bufTree,
-        (BINARY_TREE*)g_dbgData.bufTree, node, sizeof(BUF_INFO));
-    if (!g_dbgData.bufTree) {
-        free(node->dbgInfo.srcFile);
-        free(node);
-        free(buf);
+        buf = NULL;
     }
 
     return buf;
@@ -140,6 +158,7 @@ void _dbg_free(
         node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
 
     free(buf);
+    free(node->data.dbgInfo.srcFile);
     g_dbgData.bufTree = BtDeleteNode((BINARY_TREE*)g_dbgData.bufTree,
         node->data.addr);
 
