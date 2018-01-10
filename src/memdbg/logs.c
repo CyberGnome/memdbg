@@ -103,7 +103,9 @@ int MdbgLoggingBug(
         return STATUS_INVALID_PARAMETER;
     }
 
-    bufSize += strlen(fileAllocatedMem);
+    if (fileAllocatedMem) {
+        bufSize += strlen(fileAllocatedMem);
+    }
 
     switch (bugFlag) {
     case MEMORY_LEAK:
@@ -122,7 +124,7 @@ int MdbgLoggingBug(
         }
         break;
     case UNALLOC_MEMORY:
-        if (fileFailedMem) {
+        if (!fileFailedMem) {
             return STATUS_INVALID_PARAMETER;
         }
         bufSize += strlen(fileFailedMem);

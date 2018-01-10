@@ -56,6 +56,30 @@ BINARY_TREE* BtSearchNode(
             break;
         }
     }
+
+    return root;
+}
+
+BINARY_TREE* BtSearchNodeInRange(
+    _In_ BINARY_TREE* root,
+    _In_ void*        memAddr)
+{
+    if(!root) {
+        return root;
+    }
+
+    while (!(memAddr >= root->data.addr && (size_t)memAddr <= 
+            ((size_t)root->data.addr + root->data.size)))
+    {
+        if (memAddr < root->data.addr) {
+            root = root->left;
+        } else {
+            root = root->right;
+        } if (!root) {
+            break;
+        }
+    }
+
     return root;
 }
 

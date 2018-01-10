@@ -5,22 +5,15 @@
 int main(void)
 {
     void* buf;
+    char* test_str = "Hello World!";
 
     memdbg_init();
 
-    buf = dbg_malloc(8);
-    if (!buf) {
-        return -1;
-    }
+    buf = dbg_calloc(4, 2);
 
-    buf = dbg_malloc(8);
-    if (!buf) {
-        return -1;
-    }
+    dbg_memcpy((void*)((size_t)buf + 4), test_str, 5);
 
-    memset(buf, 0, 10);
     dbg_free(buf);
-
     memdbg_deinit();
     return 0;
 }

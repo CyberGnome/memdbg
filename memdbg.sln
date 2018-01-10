@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "app", "app\app.vcxproj", "{E683A4F0-2848-432B-8273-C9A359B4CBC4}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "memdbg", "memdbg\memdbg.vcxproj", "{DA90262D-D985-43B0-BA0A-DF1DF6AA824B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_app", "test_app\test_app.vcxproj", "{DE45C341-A801-49E8-B7C9-9DAD7B4034E5}"
@@ -17,16 +15,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Debug|ARM.ActiveCfg = Debug|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Debug|Win32.ActiveCfg = Debug|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Debug|Win32.Build.0 = Debug|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Debug|Win32.Deploy.0 = Debug|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Debug|x64.ActiveCfg = Debug|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Release|ARM.ActiveCfg = Release|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Release|Win32.ActiveCfg = Release|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Release|Win32.Build.0 = Release|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Release|Win32.Deploy.0 = Release|Win32
-		{E683A4F0-2848-432B-8273-C9A359B4CBC4}.Release|x64.ActiveCfg = Release|Win32
 		{DA90262D-D985-43B0-BA0A-DF1DF6AA824B}.Debug|ARM.ActiveCfg = Debug|Win32
 		{DA90262D-D985-43B0-BA0A-DF1DF6AA824B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DA90262D-D985-43B0-BA0A-DF1DF6AA824B}.Debug|Win32.Build.0 = Debug|Win32
