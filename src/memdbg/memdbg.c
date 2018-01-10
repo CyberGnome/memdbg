@@ -241,6 +241,40 @@ void _dbg_free(
     return;
 }
 
+void* _dbg_realloc(
+    _In_ void*  ptr,
+    _In_ size_t size,
+    _In_ char*  srcFile,
+    _In_ uint   fileLine)
+{
+    void*        dst;
+    BINARY_TREE* node;
+
+    if (!g_dbgData.bufTree) {
+        return ptr;
+    }
+
+    node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, ptr);
+    if (!node) {
+        return ptr;
+    }
+
+    dst = _dbg_malloc(size, srcFile, fileLine);
+    if (!dst) {
+        return ptr;
+    }
+
+    if (size <= node->data.size) {
+        _dbg_memcpy(dst, ptr, size, srcFile, fileLine);
+    } else {
+        _dbg_memcpy(dst, ptr, node->data.size, srcFile, fileLine);
+    }
+
+    _dbg_free(ptr, srcFile, fileLine);
+
+    return dst;
+}
+
 
 
 /************************************************************************/

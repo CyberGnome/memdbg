@@ -56,6 +56,7 @@ BINARY_TREE* BtSearchNode(
             break;
         }
     }
+
     return root;
 }
 
@@ -78,6 +79,7 @@ BINARY_TREE* BtSearchNodeInRange(
             break;
         }
     }
+
     return root;
 }
 
