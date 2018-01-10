@@ -113,10 +113,6 @@ BOOLEAN CheckBuffer(
     BINARY_TREE* node;
     size_t       availableSize;
 
-    if (!g_dbgData.bufTree) {
-        return FALSE;
-    }
-
     node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, bufptr);
     if (!node) {
         return FALSE;
@@ -217,12 +213,6 @@ void _dbg_free(
 {
     BINARY_TREE* node = NULL;
 
-    if (!g_dbgData.bufTree) {
-        MdbgLoggingBug(&g_dbgData.hLogFile,
-            NULL, 0, srcFile, fileLine, UNALLOC_MEMORY);
-        return;
-    }
-
     node = BtSearchNode((BINARY_TREE*)g_dbgData.bufTree, buf);
     if (!node) {
         MdbgLoggingBug(&g_dbgData.hLogFile,
@@ -249,10 +239,6 @@ void* _dbg_realloc(
 {
     void*        dst;
     BINARY_TREE* node;
-
-    if (!g_dbgData.bufTree) {
-        return ptr;
-    }
 
     node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, ptr);
     if (!node) {
@@ -305,10 +291,6 @@ errno_t _dbg_memcpy_s(
 {
     BINARY_TREE* node;
     size_t       availableSize;
-
-    if (!g_dbgData.bufTree) {
-        return DBGSTATUS_MEMORY_NOT_ALLOCATED;
-    }
 
     node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, destptr);
     if (!node) {
