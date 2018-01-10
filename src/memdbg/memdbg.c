@@ -141,7 +141,7 @@ void* _dbg_calloc(
     _In_ uint   fileLine)
 {
     void*     buf;
-    size_t    fullSize = size + num;
+    size_t    fullSize = size * num;
 
     buf = malloc(fullSize + sizeof(uint));
     if (!buf) {
