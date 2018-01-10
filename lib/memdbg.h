@@ -20,6 +20,12 @@ void _dbg_free(
     _In_ char*        srcFile,
     _In_ unsigned int fileLine);
 
+void* _dbg_realloc(
+    _In_ void*        ptr,
+    _In_ size_t       size,
+    _In_ char*        srcFile,
+    _In_ unsigned int fileLine);
+
 void* _dbg_memcpy(
     _In_ void*        destptr,
     _In_ const void*  srcptr,
@@ -50,6 +56,9 @@ void* _dbg_memset(
 
 #define dbg_free(_buf)                                        /* free     */ \
     _dbg_free((_buf), __FILE__, __LINE__)
+
+#define dbg_realloc(_ptr, _size)                              /* realloc  */ \
+    _dbg_realloc((_ptr), (_size), __FILE__, __LINE__)
 
 #define dbg_memcpy(_destptr, _srcptr, _num)                   /* memcpy   */ \
     _dbg_memcpy((_destptr), (_srcptr), (_num), __FILE__, __LINE__)
