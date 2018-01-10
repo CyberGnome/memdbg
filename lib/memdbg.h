@@ -48,6 +48,21 @@ void* _dbg_memset(
     _In_ char*        srcFile,
     _In_ unsigned int fileLine);
 
+void* _dbg_memmove(
+    _In_ void*        destptr,
+    _In_ const void*  srcptr,
+    _In_ size_t       num,
+    _In_ char*        srcFile,
+    _In_ unsigned int fileLine);
+
+errno_t _dbg_memmove_s(
+    _In_ void*        destptr,
+    _In_ rsize_t      destSize,
+    _In_ const void*  srcptr,
+    _In_ rsize_t      count,
+    _In_ char*        srcFile,
+    _In_ unsigned int fileLine);
+
 #define dbg_calloc(_num, _size)                               /* calloc   */ \
     _dbg_calloc((_num), (_size), __FILE__, __LINE__)
 
@@ -66,10 +81,18 @@ void* _dbg_memset(
 #define dbg_memcpy_s(_destptr, _destSize, _srcptr, _count)    /* memcpy_s */ \
     _dbg_memcpy_s((_destptr), (_destSize), (_srcptr), (_count), __FILE__, __LINE__)
 
+#define dbg_memmove(_destptr, _srcptr, _num)                   /* memmove   */ \
+    _dbg_memmove((_destptr), (_srcptr), (_num), __FILE__, __LINE__)
+
+#define dbg_memmove_s(_destptr, _destSize, _srcptr, _count)    /* memmove_s */ \
+    _dbg_memmove_s((_destptr), (_destSize), (_srcptr), (_count), __FILE__, __LINE__)
+
 #define dbg_memset(_dst, _value, _size)                       /* memset   */ \
     _dbg_memset((_dst), (_value), (_size), __FILE__, __LINE__)
 
 
+
+/* specific statuses for errorno_t */
 #define DBGSTATUS_BUFFER_OVERFLOW           ((errno_t)0x80000005L)
 #define DBGSTATUS_MEMORY_NOT_ALLOCATED      ((errno_t)0xC00000A0L)
 #define DBGSTATUS_SUCCESS                   ((errno_t)0x00000000L)

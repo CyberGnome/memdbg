@@ -4,6 +4,8 @@
 #include "memdbg.h"
 #include "logs.h"
 
+#define UNKNOWN_BUFFER_SIZE (size_t)-1
+
 MEMDBG g_dbgData;
 
 
@@ -105,10 +107,11 @@ _ret:
 
 static
 BOOLEAN CheckBuffer(
-    _In_    void*   bufptr,
-    _Inout_ size_t* size,
-    _In_    char*   srcFile,
-    _In_    uint    fileLine)
+    _In_     void*   bufptr,
+    _In_opt_ size_t  bufSize,
+    _Inout_  size_t* copySize,
+    _In_     char*   srcFile,
+    _In_     uint    fileLine)
 {
     BINARY_TREE* node;
     size_t       availableSize;
@@ -121,12 +124,24 @@ BOOLEAN CheckBuffer(
     availableSize = ((size_t)node->data.addr +
         node->data.size) - (size_t)bufptr;
 
-    if (availableSize < *size) {
-        *size = availableSize;
-        MdbgLoggingBug(&g_dbgData.hLogFile,
-            node->data.dbgInfo.srcFile,
-            node->data.dbgInfo.fileLine,
-            srcFile, fileLine, OVERFLOW);
+    if (bufSize == UNKNOWN_BUFFER_SIZE) {
+        if (availableSize < *copySize) {
+            *copySize = availableSize;
+            MdbgLoggingBug(&g_dbgData.hLogFile,
+                node->data.dbgInfo.srcFile,
+                node->data.dbgInfo.fileLine,
+                srcFile, fileLine, OVERFLOW);
+        }
+    } else {
+        if (availableSize < bufSize ||
+            bufSize < *copySize) 
+        {
+            MdbgLoggingBug(&g_dbgData.hLogFile,
+                node->data.dbgInfo.srcFile,
+                node->data.dbgInfo.fileLine,
+                srcFile, fileLine, OVERFLOW);
+            return FALSE;
+        }
     }
 
     return TRUE;
@@ -274,7 +289,9 @@ void* _dbg_memcpy(
     _In_ char*       srcFile,
     _In_ uint        fileLine)
 {
-    if (!CheckBuffer(destptr, &num, srcFile, fileLine)) {
+    if (!CheckBuffer(destptr, UNKNOWN_BUFFER_SIZE,
+        &num, srcFile, fileLine))
+    {
         return NULL;
     }
 
@@ -289,24 +306,7 @@ errno_t _dbg_memcpy_s(
     _In_ char*       srcFile,
     _In_ uint        fileLine)
 {
-    BINARY_TREE* node;
-    size_t       availableSize;
-
-    node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, destptr);
-    if (!node) {
-        return DBGSTATUS_MEMORY_NOT_ALLOCATED;
-    }
-
-    availableSize = ((size_t)node->data.addr +
-        node->data.size) - (size_t)destptr;
-
-    if (availableSize < destSize ||
-        destSize < count) 
-    {
-        MdbgLoggingBug(&g_dbgData.hLogFile,
-            node->data.dbgInfo.srcFile,
-            node->data.dbgInfo.fileLine,
-            srcFile, fileLine, OVERFLOW);
+    if (!CheckBuffer(destptr, destSize, &count, srcFile, fileLine)) {
         return DBGSTATUS_BUFFER_OVERFLOW;
     }
 
@@ -320,9 +320,42 @@ void* _dbg_memset(
     _In_ char*  srcFile,
     _In_ uint   fileLine)
 {
-    if (!CheckBuffer(dst, &size, srcFile, fileLine)) {
+    if (!CheckBuffer(dst, UNKNOWN_BUFFER_SIZE,
+        &size, srcFile, fileLine))
+    {
         return NULL;
     }
 
     return memset(dst, value, size);
+}
+
+void* _dbg_memmove(
+    _In_ void*       destptr,
+    _In_ const void* srcptr,
+    _In_ size_t      num,
+    _In_ char*       srcFile,
+    _In_ uint        fileLine)
+{
+    if (!CheckBuffer(destptr, UNKNOWN_BUFFER_SIZE,
+        &num, srcFile, fileLine))
+    {
+        return NULL;
+    }
+
+    return memmove(destptr, srcptr, num);
+}
+
+errno_t _dbg_memmove_s(
+    _In_ void*       destptr,
+    _In_ rsize_t     destSize,
+    _In_ const void* srcptr,
+    _In_ rsize_t     count,
+    _In_ char*       srcFile,
+    _In_ uint        fileLine)
+{
+    if (!CheckBuffer(destptr, destSize, &count, srcFile, fileLine)) {
+        return DBGSTATUS_BUFFER_OVERFLOW;
+    }
+
+    return memmove_s(destptr, destSize, srcptr, count);
 }
