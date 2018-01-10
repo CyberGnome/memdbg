@@ -21,6 +21,10 @@ BINARY_TREE* BtSearchNode(
     _In_ BINARY_TREE *root,
     _In_ void* memAddr);
 
+BINARY_TREE* BtSearchNodeInRange(
+    _In_ BINARY_TREE* root,
+    _In_ void*        memAddr);
+
 BINARY_TREE* BtDeleteNode(
     _In_ BINARY_TREE* root,
     _In_ void*        memAddr);
