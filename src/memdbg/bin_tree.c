@@ -68,8 +68,8 @@ BINARY_TREE* BtSearchNodeInRange(
         return root;
     }
 
-    while (!(memAddr >= root->data.addr && (size_t)memAddr <= 
-            ((size_t)root->data.addr + root->data.size)))
+    while (!(memAddr >= root->data.addr &&
+            (size_t)memAddr <= ((size_t)root->data.addr + root->data.size)))
     {
         if (memAddr < root->data.addr) {
             root = root->left;

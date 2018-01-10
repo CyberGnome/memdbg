@@ -29,7 +29,7 @@ static
 int MdbgWriteLogToFile(
     _In_ HANDLE hFile,
     _In_ void*  buf,
-    _In_ DWORD size)
+    _In_ DWORD  size)
 {
     DWORD wsize;
 
@@ -42,12 +42,12 @@ int MdbgWriteLogToFile(
 
 static
 char* BuildLogMsg(
-    _In_     char*        msg,
-    _In_opt_ char*        fileAllocatedMem,
-    _In_opt_ unsigned int lineAllocatedMem,
-    _In_opt_ char*        fileFailedMem,
-    _In_opt_ unsigned int lineFailedMem,
-    _In_     unsigned int bufSize)
+    _In_     char*  msg,
+    _In_opt_ char*  fileAllocatedMem,
+    _In_opt_ size_t lineAllocatedMem,
+    _In_opt_ char*  fileFailedMem,
+    _In_opt_ size_t lineFailedMem,
+    _In_     size_t bufSize)
 {
     char* msgBuf;
     char  line[16];
@@ -62,7 +62,7 @@ char* BuildLogMsg(
     if (fileFailedMem) {
         strcat_s(msgBuf, bufSize, fileFailedMem);
         strcat_s(msgBuf, bufSize, delimiter);
-        if (_itoa_s(lineFailedMem, line, 0x10, 0xA)) {
+        if (_itoa_s((int)lineFailedMem, line, 0x10, 0xA)) {
             free(msgBuf);
             return NULL;
         }
@@ -74,7 +74,7 @@ char* BuildLogMsg(
         strcat_s(msgBuf, bufSize, memory_alloc);
         strcat_s(msgBuf, bufSize, fileAllocatedMem);
         strcat_s(msgBuf, bufSize, delimiter);
-        if (_itoa_s(lineAllocatedMem, line, 0x10, 0xA)) {
+        if (_itoa_s((int)lineAllocatedMem, line, 0x10, 0xA)) {
             free(msgBuf);
             return NULL;
         }
@@ -88,16 +88,16 @@ char* BuildLogMsg(
 }
 
 int MdbgLoggingBug(
-    _Inout_  HANDLE*      hFile,
-    _In_     char*        fileAllocatedMem,
-    _In_     unsigned int lineAllocatedMem,
-    _In_opt_ char*        fileFailedMem,
-    _In_opt_ unsigned int lineFailedMem,
-    _In_     unsigned int bugFlag)
+    _Inout_  HANDLE* hFile,
+    _In_     char*   fileAllocatedMem,
+    _In_     size_t  lineAllocatedMem,
+    _In_opt_ char*   fileFailedMem,
+    _In_opt_ size_t  lineFailedMem,
+    _In_     size_t  bugFlag)
 {
-    char*        logBuf;
-    unsigned int bufSize = MIN_MSG_SIZE;
-    int          err;
+    char*  logBuf;
+    size_t bufSize = MIN_MSG_SIZE;
+    int    err;
 
     if (bugFlag != UNALLOC_MEMORY && !fileAllocatedMem) {
         return STATUS_INVALID_PARAMETER;
@@ -147,7 +147,7 @@ int MdbgLoggingBug(
         }
     }
 
-    err = MdbgWriteLogToFile(*hFile, logBuf, strlen(logBuf));
+    err = MdbgWriteLogToFile(*hFile, logBuf, (DWORD)strlen(logBuf));
 _freeBuf:
     free(logBuf);
     return err;

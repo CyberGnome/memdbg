@@ -9,23 +9,23 @@ void MdbgCloseLogFile(
     _In_ HANDLE hFile);
 
 int MdbgLoggingBug(
-    _Inout_  HANDLE*      hFile,
-    _In_     char*        fileAllocatedMem,
-    _In_     unsigned int lineAllocatedMem,
-    _In_opt_ char*        fileFailedMem,
-    _In_opt_ unsigned int lineFailedMem,
-    _In_     unsigned int bugFlag);
+    _Inout_  HANDLE* hFile,
+    _In_     char*   fileAllocatedMem,
+    _In_     size_t  lineAllocatedMem,
+    _In_opt_ char*   fileFailedMem,
+    _In_opt_ size_t  lineFailedMem,
+    _In_     size_t  bugFlag);
 
 // log file
 #define LOG_FILE (char*)"MEMORY_BUGS.log"
 
 // min log message size
-#define MIN_MSG_SIZE (unsigned int)0x40
+#define MIN_MSG_SIZE (size_t)0x40
 
 // error codes
-#define MEMORY_LEAK    (unsigned int)0xBADC0DED
-#define OVERFLOW       (unsigned int)0xBADC0C0A
-#define UNALLOC_MEMORY (unsigned int)0xDEADC0DE
+#define MEMORY_LEAK    (size_t)0xBADC0DED
+#define OVERFLOW       (size_t)0xBADC0C0A
+#define UNALLOC_MEMORY (size_t)0xDEADC0DE
 
 // strings
 #define mem_leaks_bug    (char*)"Memory Leak"

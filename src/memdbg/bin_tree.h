@@ -5,21 +5,21 @@
 
 typedef unsigned char byte;
 
-typedef struct _tree {
-    struct _tree* left;
-    struct _tree* right;
-    BUF_INFO      data;
+typedef struct _BINARY_TREE {
+    struct _BINARY_TREE* left;
+    struct _BINARY_TREE* right;
+    BUF_INFO             data;
 } BINARY_TREE;
 
 BINARY_TREE* BtAddNode(
-    _Inout_  BINARY_TREE *root,
-    _In_opt_ BINARY_TREE *node,
-    _In_     void*  data,
-    _In_     size_t dataSize);
+    _Inout_  BINARY_TREE* root,
+    _In_opt_ BINARY_TREE* node,
+    _In_     void*        data,
+    _In_     size_t       dataSize);
 
 BINARY_TREE* BtSearchNode(
-    _In_ BINARY_TREE *root,
-    _In_ void* memAddr);
+    _In_ BINARY_TREE* root,
+    _In_ void*        memAddr);
 
 BINARY_TREE* BtSearchNodeInRange(
     _In_ BINARY_TREE* root,
