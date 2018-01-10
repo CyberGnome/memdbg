@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "bin_tree.h"
+#include "memdbg.h"
 #include "logs.h"
 
 MEMDBG g_dbgData;
@@ -222,4 +223,41 @@ void* _dbg_memcpy(
     }
 
     return memcpy(destptr, srcptr, num);
+}
+
+errno_t _dbg_memcpy_s(
+    _In_ void*       destptr,
+    _In_ size_t      destSize,
+    _In_ const void* srcptr,
+    _In_ size_t      count,
+    _In_ char*       srcFile,
+    _In_ uint        fileLine)
+{
+    BINARY_TREE* node;
+    size_t       availableSize;
+
+    if (!g_dbgData.bufTree) {
+        return DBGSTATUS_MEMORY_NOT_ALLOCATED;
+    }
+
+    node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, destptr);
+    if (!node) {
+        return DBGSTATUS_MEMORY_NOT_ALLOCATED;
+    }
+
+    availableSize = ((size_t)node->data.addr +
+        node->data.size) - (size_t)destptr;
+
+    if (availableSize < destSize ||
+        destSize < count) 
+    {
+        destSize = availableSize;
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            node->data.dbgInfo.srcFile,
+            node->data.dbgInfo.fileLine,
+            srcFile, fileLine, OVERFLOW);
+        return DBGSTATUS_BUFFER_OVERFLOW;
+    }
+
+    return memcpy_s(destptr, destSize, srcptr, count);
 }
