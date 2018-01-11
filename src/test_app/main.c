@@ -42,6 +42,7 @@ void CalcFactorial(
 
 void BuildResultMsg(
     _In_ char* msg,
+    _In_ int   msgSize,
     _In_ char* num,
     _In_ char* fact_str)
 {
@@ -49,7 +50,8 @@ void BuildResultMsg(
 
     MEMCPY(msg, fact_str, strlen(fact_str));
     MEMCPY(&msg[strlen(msg)], str, strlen(str));
-    MEMCPY(&msg[strlen(msg)], num, strlen(num));
+    MEMCPY_S(&msg[strlen(msg)], msgSize - strlen(msg), 
+        num, strlen(num));
 
     return;
 }
@@ -71,8 +73,12 @@ void PrintFactorial(
 
     CalcFactorial(num, &res, &resStr);
     if (resStr) {
-        BuildResultMsg(msg, numStr, resStr);
-        printf("%s\n", msg);
+        BuildResultMsg(msg, 32, numStr, resStr);
+
+        msg = (char*)REALLOC(msg, 48);
+        if (msg) {
+            printf("%s\n", msg);
+        }
     }
 
     FREE(msg);
@@ -81,7 +87,6 @@ void PrintFactorial(
 
 int main(void)
 {
-
     MEMDBG_INIT();
 
     PrintFactorial(5);
