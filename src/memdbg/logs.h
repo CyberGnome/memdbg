@@ -19,9 +19,6 @@ int MdbgLoggingBug(
 // log file
 #define LOG_FILE (char*)"MEMORY_BUGS.log"
 
-// min log message size
-#define MIN_MSG_SIZE (size_t)0x40
-
 // error codes
 #define MEMORY_LEAK    (size_t)0xBADC0DED
 #define OVERFLOW       (size_t)0xBADC0C0A
