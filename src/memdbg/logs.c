@@ -128,7 +128,7 @@ int MdbgLoggingBug(
             return STATUS_INVALID_PARAMETER;
         }
         bufSize += strlen(fileFailedMem);
-        logBuf = BuildLogMsg(unalloc_mem_bug, NULL, 0, fileFailedMem, 
+        logBuf = BuildLogMsg(access_mem_bug, NULL, 0, fileFailedMem, 
             lineFailedMem, bufSize);
         break;
     default:

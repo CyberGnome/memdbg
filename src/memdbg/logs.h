@@ -30,7 +30,7 @@ int MdbgLoggingBug(
 // strings
 #define mem_leaks_bug    (char*)"Memory Leak"
 #define buf_overflow_bug (char*)"Buffer overflow at file "
-#define unalloc_mem_bug  (char*)"Trying to free unallocated memory at file "
+#define access_mem_bug   (char*)"Trying to access unallocated memory "
 
 #define memory_alloc     (char*)"Memory was allocated at file "
 

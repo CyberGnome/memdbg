@@ -126,6 +126,8 @@ BOOLEAN CheckBuffer(
 
     node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, bufptr);
     if (!node) {
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            NULL, 0, srcFile, fileLine, UNALLOC_MEMORY);
         return FALSE;
     }
 
