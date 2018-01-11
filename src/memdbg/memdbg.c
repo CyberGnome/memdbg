@@ -31,7 +31,7 @@ char* DuplString(
 }
 
 static
-void CheckOverflow(
+BOOLEAN CheckOverflow(
     void*  buf,
     size_t size,
     char*  srcFile,
@@ -40,9 +40,10 @@ void CheckOverflow(
     if (*(size_t*)((char*)buf + size) != MEMDBG_TAG) {
         MdbgLoggingBug(&g_dbgData.hLogFile,
             srcFile, fileLine, NULL, 0, OVERFLOW);
+        return FALSE;
     }
 
-    return;
+    return TRUE;
 }
 
 static
@@ -60,9 +61,15 @@ void BtFreeTree (
         node->data.dbgInfo.srcFile,
         node->data.dbgInfo.fileLine,
         NULL, 0, MEMORY_LEAK);
-    CheckOverflow(node->data.addr, node->data.size,
-        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
-    free(node->data.addr);
+    if (CheckOverflow(node->data.addr, node->data.size,
+        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine))
+    {
+        free(node->data.addr);
+        /* If we do not prevent overflow
+         * don`t free the memory, because
+         * we can crash application.
+         */
+    }
     free(node->data.dbgInfo.srcFile);
     free(node);
 
@@ -119,6 +126,8 @@ BOOLEAN CheckBuffer(
 
     node = BtSearchNodeInRange((BINARY_TREE*)g_dbgData.bufTree, bufptr);
     if (!node) {
+        MdbgLoggingBug(&g_dbgData.hLogFile,
+            NULL, 0, srcFile, fileLine, UNALLOC_MEMORY);
         return FALSE;
     }
 
@@ -236,10 +245,16 @@ void _dbg_free(
         return;
     }
 
-    CheckOverflow(memory, node->data.size, 
-        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine);
+    if (!CheckOverflow(memory, node->data.size, 
+        node->data.dbgInfo.srcFile, node->data.dbgInfo.fileLine))
+    {
+        free(memory);
+        /* If we do not prevent overflow
+         * don`t free the memory, because
+         * we can crash application.
+         */
+    }
 
-    free(memory);
     free(node->data.dbgInfo.srcFile);
     g_dbgData.bufTree = BtDeleteNode((BINARY_TREE*)g_dbgData.bufTree,
         node->data.addr);

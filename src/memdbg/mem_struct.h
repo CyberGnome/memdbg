@@ -15,6 +15,6 @@ typedef struct {
     void*  bufTree;
 } MEMDBG;
 
-#define MEMDBG_TAG (UINT32)'MDBG'
+#define MEMDBG_TAG (UINT32)0x47424489
 
 #endif // mem_struct_h__

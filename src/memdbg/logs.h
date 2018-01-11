@@ -19,9 +19,6 @@ int MdbgLoggingBug(
 // log file
 #define LOG_FILE (char*)"MEMORY_BUGS.log"
 
-// min log message size
-#define MIN_MSG_SIZE (size_t)0x40
-
 // error codes
 #define MEMORY_LEAK    (size_t)0xBADC0DED
 #define OVERFLOW       (size_t)0xBADC0C0A
@@ -30,7 +27,7 @@ int MdbgLoggingBug(
 // strings
 #define mem_leaks_bug    (char*)"Memory Leak"
 #define buf_overflow_bug (char*)"Buffer overflow at file "
-#define unalloc_mem_bug  (char*)"Trying to free unallocated memory at file "
+#define access_mem_bug   (char*)"Trying to access unallocated memory "
 
 #define memory_alloc     (char*)"Memory was allocated at file "
 
