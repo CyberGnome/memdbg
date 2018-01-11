@@ -15,6 +15,7 @@
 /*****************************************************************************/
 
 
+
 void CalcFactorial(
     _In_  size_t  num,
     _Out_ size_t* resInt,
@@ -74,6 +75,7 @@ void PrintFactorial(
         printf("%s\n", msg);
     }
 
+    FREE(msg);
     return;
 }
 
@@ -90,4 +92,3 @@ int main(void)
 
     return 0;
 }
-
