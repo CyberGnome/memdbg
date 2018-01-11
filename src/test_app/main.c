@@ -37,6 +37,9 @@ void CalcFactorial(
     }
 
     itoa((int)res, *resStr, 0xA);
+    /* It`s standard function. Library can detect buffer overflow in "resStr" buffer
+     * but it can`t detect place of buffer overflow.
+     */
     return;
 }
 
