@@ -105,6 +105,32 @@ BOOLEAN FillFive(
     return TRUE;
 }
 
+BOOLEAN FillSix(
+    _In_ void*  buf,
+    _In_ size_t bufSize,
+    _In_ size_t cols)
+{
+    void* tmp;
+
+    if (bufSize < cols) {
+        return FALSE;
+    }
+
+    tmp = MALLOC(cols);
+    if (!tmp) {
+        return FALSE;
+    }
+
+    MEMSET(tmp, 5, cols);
+
+    MEMMOVE_S(buf, bufSize, tmp, cols);
+
+    FREE(tmp);
+
+    return TRUE;
+}
+
+
 int main(void)
 {
     void* buf1;
@@ -127,6 +153,10 @@ int main(void)
 
     FillFive(buf1, 50);
     FillFive(buf2, 200);
+
+    FillSix(buf1, 50, 40);
+    FillSix(buf1, 60, 60);
+
 
     FREE(buf1);
     FREE(buf2);
