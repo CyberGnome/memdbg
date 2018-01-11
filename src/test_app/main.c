@@ -85,13 +85,51 @@ void PrintFactorial(
     return;
 }
 
+
+BOOLEAN FillFive(
+    _In_ void*  buf,
+    _In_ size_t cols)
+{
+    void* tmp = MALLOC(cols);
+
+    if (!tmp) {
+        return FALSE;
+    }
+
+    MEMSET(tmp, 5, cols);
+
+    MEMMOVE(buf, tmp, cols);
+
+    FREE(tmp);
+
+    return TRUE;
+}
+
 int main(void)
 {
+    void* buf1;
+    void* buf2;
+
     MEMDBG_INIT();
 
     PrintFactorial(5);
     PrintFactorial(10);
     PrintFactorial(25);
+
+    buf1 = MALLOC(50);
+    if (!buf1) {
+        return 0;
+    }
+    buf2 = MALLOC(100);
+    if (!buf2) {
+        return 0;
+    }
+
+    FillFive(buf1, 50);
+    FillFive(buf2, 200);
+
+    FREE(buf1);
+    FREE(buf2);
 
     MEMDBG_DEINIT();
 
